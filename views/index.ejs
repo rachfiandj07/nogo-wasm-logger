@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using Imported Function in HTML</title>
+    <style>
+        /* Style for the log items */
+        .log-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        /* Style for the log level */
+        .log-level {
+            font-weight: bold;
+        }
+        /* Style for the log message */
+        .log-message {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>WASM Log:</h1>
+    <div id="logContainer"></div>
+
+    <script>
+        // Function to render the log items
+        function renderLog(logItem) {
+            const logContainer = document.getElementById('logContainer');
+            const logDiv = document.createElement('div');
+            logDiv.classList.add('log-item');
+
+            // Create elements for log level and message
+            const logLevel = document.createElement('div');
+            logLevel.classList.add('log-level');
+            logLevel.textContent = 'Level: ' + logItem.level;
+            
+            const logMessage = document.createElement('div');
+            logMessage.classList.add('log-message');
+            logMessage.textContent = 'Message: ' + logItem.msg;
+
+            // Append log level and message to log item container
+            logDiv.appendChild(logLevel);
+            logDiv.appendChild(logMessage);
+
+            // Append log item container to log container
+            logContainer.appendChild(logDiv);
+        }
+
+        // Function to render all log items
+        function renderLogs(wasmLog) {
+            const logContainer = document.getElementById('logContainer');
+            logContainer.innerHTML = ''; // Clear previous content
+            wasmLog.forEach(logItem => {
+                renderLog(logItem);
+            });
+        }
+
+        // Function to fetch the wasmLog and render it
+        function fetchAndRenderData() {
+            fetch('/getWasmLog') // Assuming this endpoint provides the latest data
+                .then(response => response.json())
+                .then(data => {
+                    renderLogs(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        // Fetch and render data initially
+        fetchAndRenderData();
+
+        // Poll for updates every X milliseconds (e.g., every 5 seconds)
+        setInterval(fetchAndRenderData, 1);
+    </script>
+</body>
+</html>

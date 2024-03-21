@@ -1,0 +1,21 @@
+{
+  "name": "nogo-wasm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "buildWasm": "GOOS=js GOARCH=wasm go build -o app.wasm",
+    "logger": "npx nodemon logger.js",
+    "start": "npx nodemon index.js",
+    "serve": "npm run buildWasm && npm run start",
+    "all": "npm run logger & npm run serve",
+    "html": "npx nodemon html_presentation/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.19.1"
+  }
+}
